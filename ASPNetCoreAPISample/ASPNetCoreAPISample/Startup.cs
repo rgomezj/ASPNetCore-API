@@ -35,6 +35,7 @@ namespace ASPNetCoreAPISample
         {
             services.AddCustomizedMvc();
             services.AddCustomizedRouting();
+            services.AddCustomizedVersioning();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
