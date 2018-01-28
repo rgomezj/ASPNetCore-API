@@ -1,4 +1,5 @@
-﻿using ASPNetCoreAPISample.Infrastructure;
+﻿using ASPNetCoreAPISample.Filters;
+using ASPNetCoreAPISample.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -19,7 +20,8 @@ namespace ASPNetCoreAPISample.Middleware.Configuration
                 {
                     opt.OutputFormatters.Remove(jsonFormatter);
                     opt.OutputFormatters.Add(new IonOutputFormatter(jsonFormatter));
-                }
+                };
+                opt.Filters.Add(typeof(JsonExceptionFilter));
             }
             );
 
