@@ -10,8 +10,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NLog.Web;
 using NLog.Extensions.Logging;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using ASPNetCoreAPISample.Infrastructure;
+using ASPNetCoreAPISample.Middleware.Configuration;
 
 namespace ASPNetCoreAPISample
 {
@@ -33,18 +33,8 @@ namespace ASPNetCoreAPISample
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(opt =>
-            {
-                var jsonFormatter = opt.OutputFormatters.OfType<JsonOutputFormatter>().SingleOrDefault();
-                if (jsonFormatter != null)
-                {
-                    opt.OutputFormatters.Remove(jsonFormatter);
-                    opt.OutputFormatters.Add(new IonOutputFormatter(jsonFormatter));
-                }
-            }
-            );
-
-            services.AddRouting(opt => opt.LowercaseUrls = true);
+            services.AddCustomizedMvc();
+            services.AddCustomizedRouting();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
