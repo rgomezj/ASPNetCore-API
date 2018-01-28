@@ -1,6 +1,8 @@
 ﻿using ASPNetCoreAPISample.Filters;
 using ASPNetCoreAPISample.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -11,7 +13,7 @@ namespace ASPNetCoreAPISample.Middleware.Configuration
 {
     public static partial class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddCustomizedMvc(this IServiceCollection services)
+        public static IServiceCollection AddCustomizedMvc(this IServiceCollection services, IConfigurationRoot configuration)
         {
             services.AddMvc(opt =>
             {
@@ -21,7 +23,9 @@ namespace ASPNetCoreAPISample.Middleware.Configuration
                     opt.OutputFormatters.Remove(jsonFormatter);
                     opt.OutputFormatters.Add(new IonOutputFormatter(jsonFormatter));
                 };
+                opt.SslPort = configuration.GetValue<int>("iisSettings:iisExpress:sslPort");
                 opt.Filters.Add(typeof(JsonExceptionFilter));
+                opt.Filters.Add(typeof(RequireHttpsAttribute));
             }
             );
 

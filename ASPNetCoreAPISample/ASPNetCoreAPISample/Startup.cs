@@ -17,6 +17,8 @@ namespace ASPNetCoreAPISample
 {
     public class Startup
     {
+        Microsoft.Extensions.Configuration.IConfigurationRoot _launchSettings;
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -26,6 +28,11 @@ namespace ASPNetCoreAPISample
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
+            
+            _launchSettings = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("Properties\\launchSettings.json")
+                .Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -33,7 +40,7 @@ namespace ASPNetCoreAPISample
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCustomizedMvc();
+            services.AddCustomizedMvc(_launchSettings);
             services.AddCustomizedRouting();
             services.AddCustomizedVersioning();
         }
@@ -48,6 +55,8 @@ namespace ASPNetCoreAPISample
             env.ConfigureNLog("nlog.config");
             loggerFactory.AddNLog();
             app.AddNLogWeb();
+
+            //app.useht
 
             app.UseMvc();
         }
