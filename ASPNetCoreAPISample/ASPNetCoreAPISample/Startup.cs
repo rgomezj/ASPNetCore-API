@@ -12,6 +12,8 @@ using NLog.Web;
 using NLog.Extensions.Logging;
 using ASPNetCoreAPISample.Infrastructure;
 using ASPNetCoreAPISample.Middleware.Configuration;
+using ASPNetCoreAPISample.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASPNetCoreAPISample
 {
@@ -40,6 +42,7 @@ namespace ASPNetCoreAPISample
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<HotelApiContext>(opt => opt.UseInMemoryDatabase("Hotel"));
             services.AddCustomizedMvc(_launchSettings);
             services.AddCustomizedRouting();
             services.AddCustomizedVersioning();
@@ -48,13 +51,19 @@ namespace ASPNetCoreAPISample
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
             env.ConfigureNLog("nlog.config");
             loggerFactory.AddNLog();
             app.AddNLogWeb();
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                using (var serviceScope = app.ApplicationServices.CreateScope())
+                {
+                    var context = serviceScope.ServiceProvider.GetService<HotelApiContext>();
+                    HotelApiContext.AddTestData(context);
+                }
+            }
 
             app.UseHsts(opt =>
             {
