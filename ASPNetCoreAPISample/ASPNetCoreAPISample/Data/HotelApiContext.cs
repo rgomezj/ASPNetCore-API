@@ -20,14 +20,14 @@ namespace ASPNetCoreAPISample.Data
         {
             dbContext.Rooms.Add(new RoomEntity()
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.Parse("5c8fbfee-e9e3-4bcc-bdee-643203a30ef9"),
                 Name = "Premium Suite",
                 Rate = 10119
             });
 
             dbContext.Rooms.Add(new RoomEntity()
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.Parse("c3b7ed37-e6a9-457c-b1c8-42cc7ba07095"),
                 Name = "Standard",
                 Rate = 23959
             });
