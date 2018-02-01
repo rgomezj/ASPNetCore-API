@@ -25,6 +25,7 @@ namespace ASPNetCoreAPISample.Middleware.Configuration
                 };
                 opt.SslPort = configuration.GetValue<int>("iisSettings:iisExpress:sslPort");
                 opt.Filters.Add(typeof(JsonExceptionFilter));
+                opt.Filters.Add(typeof(LinkRewriteFilter));
                 opt.Filters.Add(typeof(RequireHttpsAttribute));
             }
             );

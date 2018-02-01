@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ASPNetCoreAPISample.Models;
 
 namespace ASPNetCoreAPISample.Controllers
 {
@@ -14,10 +15,10 @@ namespace ASPNetCoreAPISample.Controllers
         [HttpGet(Name = nameof(GetRoot))]
         public IActionResult GetRoot()
         {
-            var response = new
+            var response = new RootResponse
             {
-                href = Url.Link(nameof(GetRoot), null),
-                rooms = Url.Link(nameof(RoomsController.GetRooms), null)
+                //HRef = Link.LinkTo(nameof(GetRoot), null),
+                Rooms = Link.LinkTo(nameof(RoomsController.GetRooms), null)
             };
 
             return Ok(response);
