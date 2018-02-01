@@ -14,6 +14,8 @@ using ASPNetCoreAPISample.Infrastructure;
 using ASPNetCoreAPISample.Middleware.Configuration;
 using ASPNetCoreAPISample.Data;
 using Microsoft.EntityFrameworkCore;
+using ASPNetCoreAPISample.Services;
+using AutoMapper;
 
 namespace ASPNetCoreAPISample
 {
@@ -46,6 +48,8 @@ namespace ASPNetCoreAPISample
             services.AddCustomizedMvc(_launchSettings);
             services.AddCustomizedRouting();
             services.AddCustomizedVersioning();
+            services.AddAutoMapper();
+            services.AddScoped<IRoomService, DefaultRoomService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
