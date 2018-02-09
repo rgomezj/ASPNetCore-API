@@ -16,6 +16,7 @@ using ASPNetCoreAPISample.Data;
 using Microsoft.EntityFrameworkCore;
 using ASPNetCoreAPISample.Services;
 using AutoMapper;
+using ASPNetCoreAPISample.Models;
 
 namespace ASPNetCoreAPISample
 {
@@ -50,6 +51,14 @@ namespace ASPNetCoreAPISample
             services.AddCustomizedVersioning();
             services.AddAutoMapper();
             services.AddScoped<IRoomService, DefaultRoomService>();
+            services.AddScoped<IOpeningService, DefaultOpeningService>();
+            services.AddScoped<IBookingService, DefaultBookingService>();
+            services.AddScoped<IDateLogicService, DefaultDateLogicService>();
+
+            services.Configure<HotelOptions>(Configuration);
+            services.Configure<HotelInfo>(Configuration.GetSection("Info"));
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,7 +74,8 @@ namespace ASPNetCoreAPISample
                 using (var serviceScope = app.ApplicationServices.CreateScope())
                 {
                     var context = serviceScope.ServiceProvider.GetService<HotelApiContext>();
-                    HotelApiContext.AddTestData(context);
+                    var dateLogicService = serviceScope.ServiceProvider.GetRequiredService<IDateLogicService>();
+                    HotelApiContext.AddTestData(context, dateLogicService);
                 }
             }
 

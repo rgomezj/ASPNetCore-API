@@ -16,10 +16,12 @@ namespace ASPNetCoreAPISample.Controllers
     public class RoomsController : Controller
     {
         private readonly IRoomService _service;
+        private readonly IOpeningService _openingService;
 
-        public RoomsController(IRoomService service)
+        public RoomsController(IRoomService service, IOpeningService openingService)
         {
             _service = service;
+            _openingService = openingService;
         }
 
         [HttpGet(Name = nameof(GetRoomsAsync))]
@@ -45,6 +47,25 @@ namespace ASPNetCoreAPISample.Controllers
             if (entity == null) return NotFound();
 
             return Ok(entity);
+        }
+
+        [HttpGet("Openings", Name = nameof(GetAllRoomOpeningsAsync))]
+        public async Task<IActionResult> GetAllRoomOpeningsAsync(CancellationToken ct, [FromQuery] PagingOptions pagingOptions)
+        {
+            var openings = await _openingService.GetOpeningsAsync(ct, pagingOptions);
+
+            var collectionLink = Link.ToCollection(nameof(GetAllRoomOpeningsAsync));
+
+            var collection = new PagedCollection<Opening>
+            {
+                Self = collectionLink,
+                Value = openings.Items.ToArray(),
+                Size = openings.TotalSize,
+                Offset = pagingOptions.Offset.Value,
+                Limit = pagingOptions.Limit.Value
+            };
+
+            return Ok(collection);
         }
     }
 }
