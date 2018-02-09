@@ -1,6 +1,7 @@
 ﻿using ASPNetCoreAPISample.Data;
 using ASPNetCoreAPISample.Models;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,13 @@ namespace ASPNetCoreAPISample.Services
             if (entity == null) return null;
 
             return Mapper.Map<Room>(entity);
+        }
+
+        public async Task<IEnumerable<Room>> GetRoomsAsync(CancellationToken ct)
+        {
+            var query = _dataContext.Rooms.ProjectTo<Room>();
+            
+            return await query.ToArrayAsync(ct);
         }
     }
 }

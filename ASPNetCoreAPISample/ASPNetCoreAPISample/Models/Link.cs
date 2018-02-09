@@ -12,7 +12,7 @@ namespace ASPNetCoreAPISample.Models
         public const string GETMETHOD = "GET";
 
         [JsonProperty(Order = -50)]
-        public string HRef { get; set; }
+        public string Href { get; set; }
 
         [JsonProperty(Order = -40, DefaultValueHandling = DefaultValueHandling.Ignore, NullValueHandling = NullValueHandling.Ignore)]
         [DefaultValue(GETMETHOD)]
@@ -27,13 +27,22 @@ namespace ASPNetCoreAPISample.Models
         [JsonIgnore]
         public object RouteValues { get; set; }
 
-        public static Link LinkTo(string routeName, object values)
+        public static Link To(string routeName, object values)
         => new Link
         {
             RouteName = routeName,
             RouteValues = values,
             Method = GETMETHOD,
             Relations = null
-        }; 
+        };
+
+        public static Link ToCollection(string routeName, object values = null)
+       => new Link
+       {
+           RouteName = routeName,
+           RouteValues = values,
+           Method = GETMETHOD,
+           Relations = new string[] { "collection" }
+       };
     }
 }

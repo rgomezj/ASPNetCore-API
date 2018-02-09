@@ -17,8 +17,8 @@ namespace ASPNetCoreAPISample.Controllers
         {
             var response = new RootResponse
             {
-                //HRef = Link.LinkTo(nameof(GetRoot), null),
-                Rooms = Link.LinkTo(nameof(RoomsController.GetRooms), null)
+                Self = Link.To(nameof(GetRoot), null),
+                Rooms = Link.To(nameof(RoomsController.GetRoomsAsync), null)
             };
 
             return Ok(response);

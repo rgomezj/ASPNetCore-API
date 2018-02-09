@@ -22,7 +22,7 @@ namespace ASPNetCoreAPISample.Infrastructure
 
             return new Link()
             {
-                HRef = _urlHelper.Link(original.RouteName, original.RouteValues),
+                Href = _urlHelper.Link(original.RouteName, original.RouteValues),
                 Method = original.Method,
                 Relations = original.Relations
             };

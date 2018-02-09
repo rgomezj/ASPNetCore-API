@@ -13,8 +13,8 @@ namespace ASPNetCoreAPISample.Infrastructure
         public MappingProfile()
         {
             CreateMap<RoomEntity, Room>()
-                .ForMember(dest => dest.Rate, opt => opt.MapFrom(c=> c.Rate / 100.0m));
-            // TODO Href
+                .ForMember(dest => dest.Rate, opt => opt.MapFrom(c => c.Rate / 100.0m))
+                .ForMember(dest => dest.Self, opt => opt.MapFrom(c => Link.To(nameof(Controllers.RoomsController.GetRoomByIdAsync), new { roomId = c.Id })));
         }
     }
 }

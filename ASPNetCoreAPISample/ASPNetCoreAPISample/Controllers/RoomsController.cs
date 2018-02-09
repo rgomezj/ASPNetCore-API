@@ -15,7 +15,6 @@ namespace ASPNetCoreAPISample.Controllers
     [Route("/[Controller]")]
     public class RoomsController : Controller
     {
-        private readonly HotelApiContext _dataContext;
         private readonly IRoomService _service;
 
         public RoomsController(IRoomService service)
@@ -23,11 +22,20 @@ namespace ASPNetCoreAPISample.Controllers
             _service = service;
         }
 
-        [HttpGet(Name = nameof(GetRooms))]
-        public IActionResult GetRooms()
+        [HttpGet(Name = nameof(GetRoomsAsync))]
+        public async Task<IActionResult> GetRoomsAsync(CancellationToken ct)
         {
-            var rooms = _dataContext.Rooms.ToList();
-            return Ok(rooms);
+            var rooms = await _service.GetRoomsAsync(ct);
+
+            var collectionLink = Link.ToCollection(nameof(GetRoomsAsync));
+
+            var collection = new Collection<Room>
+            {
+                Self = collectionLink,
+                Value = rooms.ToArray()
+            };
+
+            return Ok(collection);
         }
 
         [HttpGet("{roomId}", Name = nameof(GetRoomByIdAsync))]
